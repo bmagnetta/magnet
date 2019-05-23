@@ -56,7 +56,6 @@ h4 {font-family: "Tangerine";color: white;}
     <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
     <a href="#" class="w3-bar-item w3-button w3-padding-large">Home</a>
     <a href="#details" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Details</a>
-    <a href="#trip" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Trip</a>
     <a href="#rsvp" class="w3-bar-item w3-button w3-padding-large w3-hide-small">RSVP</a>
   </div>
 </div>
@@ -64,78 +63,12 @@ h4 {font-family: "Tangerine";color: white;}
 <!-- Navbar on small screens (remove the onclick attribute if you want the navbar to always show on top of the content when clicking on the links) -->
 <div id="navDemo" class="w3-bar-block w3-theme-dark w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
   <a href="#details" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">Details</a>
-  <a href="#trip" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">Trip</a>
   <a href="#rsvp" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">RSVP</a>
 </div>
 
 <!-- Page content -->
 <div class="w3-content" style="max-width:2000px;margin-top:46px">
 
-  <!-- Automatic Slideshow Images -->
-  <div class="mySlides w3-display-container w3-center">
-    <img src="test.jpg" style="width:100%">
-    <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
-      <h3>Los Angeles</h3>
-      <p><b>We had the best time playing at Venice Beach!</b></p>
-    </div>
-  </div>
-  <div class="mySlides w3-display-container w3-center">
-    <img src="test.jpg" style="width:100%">
-    <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
-      <h3>New York</h3>
-      <p><b>The atmosphere in New York is lorem ipsum.</b></p>
-    </div>
-  </div>
-  <div class="mySlides w3-display-container w3-center">
-    <img src="test.jpg" style="width:100%">
-    <div class="w3-display-bottommiddle w3-container w3-text-white w3-padding-32 w3-hide-small">
-      <h3>Chicago</h3>
-      <p><b>Thank you, Chicago - A night we won't forget.</b></p>
-    </div>
-  </div>
-
-  <!-- People Section -->
-  <div class="w3-container w3-theme-l5 w3-content w3-center w3-padding-64" style="max-width:800px" id="people">
-    <h2 class="w3-wide">Haze Joy and Brad</h2>
-    <p class="w3-opacity"><i>ARE GETTING MARRIED!</i></p>
-    
-    <!---
-    
-    <p class="w3-justify w3-center">We are so excited to invite you to help us celebrate our marriage on June 6th 2020! We're fortunate to have so many close friends and family. Here's a few that will be helping us with our special day.</p>
-
-
-      <div class="w3-half">
-
-        <div class="w3-card" style="margin:auto;width:50%">
-
-            <img src="test2.jpg" alt="Person" style="width:100%">
-            <div class="w3-container">
-              <h3><b>Name</b></h3>
-              <p>Title</p>
-            </div>
-        </div>
-
-      </div>
-
-
-
-
-      <div class="w3-half">
-
-        <div class="w3-card" style="margin:auto;width:50%">
-
-            <img src="test2.jpg" alt="Person" style="width:100%">
-            <div class="w3-container">
-              <h3><b>Name</b></h3>
-              <p>Title</p>
-            </div>
-        </div>
-
-      </div>
-
-    -->
-    
-  </div>
 
   <!-- Details Section / Rename "schedule" in future and add move sections representing time events with details and file upoload capabilities-->
   <div class="w3-theme-l4" id="details">
@@ -173,86 +106,15 @@ h4 {font-family: "Tangerine";color: white;}
             <button class="w3-button w3-theme-dark w3-margin-bottom" onclick="document.getElementById('activityModal').style.display='block'">Details</button>
           </div>
         </div>
+ 
         
-        <div class="w3-third w3-margin-bottom">
-          <img src="omni_ceremony.jpg" alt="Paris" style="width:100%" class="w3-hover-opacity">
-          <div class="w3-container w3-white w3-card">
-            <p><b>Ceremony</b></p>
-            <p class="w3-opacity">Sat 6 June 2016</p>
-            <p class="w3-opacity"><i class="far fa-clock" style="width:30px"></i>5:30PM-6:00PM</p>
-            <p>Ceremony in the College room of the Omni Hotel</p>
-            <button class="w3-button w3-theme-dark w3-margin-bottom" onclick="document.getElementById('ceremonyModal').style.display='block'">Details</button>
-          </div>
-        </div>
         
-        <div class="w3-third w3-margin-bottom">
-          <img src="omni_ext.jpg" alt="San Francisco" style="width:100%" class="w3-hover-opacity">
-          <div class="w3-container w3-white w3-card">
-            <p><b>Reception</b></p>
-            <p class="w3-opacity">Sat 6 June 2020</p>
-            <p class="w3-opacity"><i class="far fa-clock" style="width:30px"></i>6:00PM-11:00PM</p>
-            <p>Formal reception to follow on the 19th floor of the Omni Hotel.</p>
-            <button class="w3-button w3-theme-dark w3-margin-bottom" onclick="document.getElementById('receptionModal').style.display='block'">Details</button>
-          </div>
-        </div>
+        
       </div>
     </div>
   </div>
 
   <!-- Details Modals -->
-  <div id="receptionModal" class="w3-modal">
-    <div class="w3-modal-content w3-animate-top w3-card-4">
-      <header class="w3-container w3-theme-dark w3-center w3-padding-32">
-        <span onclick="document.getElementById('receptionModal').style.display='none'"
-       class="w3-button w3-theme-dark w3-xlarge w3-display-topright">×</span>
-        <h4 class="w3-wide"><i class="fas fa-glass-cheers"></i>Reception</h4>
-        <p class="w3-opacity">Sat 6 June 2020</p>
-      </header>
-      <div class="w3-container">
-      
-        <p class="w3-opacity"><i class="far fa-clock" style="width:30px"></i>6:00-7:00pm</p>
-        <p><label>Bar opens and cocktail hour begins with horderves.</label></p>
-
-        <p class="w3-opacity"><i class="far fa-clock" style="width:30px"></i>7:00-8:00pm</p>
-        <p><label>4-course plated dinner with cake and coffee to follow.</label></p>
-
-        <p class="w3-opacity"><i class="far fa-clock" style="width:30px"></i>8:00-11:00pm</p>
-        <p><label>DJ, drinks, etc ...</label></p>
-
-        <p class="w3-opacity"><i class="far fa-clock" style="width:30px"></i>11:00pm-???</p>
-        <p><label>New Haven bar hop!</label></p>
-
-        <button onclick="window.location.href = 'https://www.omnihotels.com/hotels/new-haven-yale/dining/john-davenports';" class="w3-button w3-block w3-theme-dark w3-padding-16 w3-section w3-right"><i class="fas fa-glass-cheers"></i>Reception Venue</button>
-        
-        <button onclick="window.location.href = 'https://www.google.com/maps/place/Omni+New+Haven+Hotel+at+Yale/@41.3057378,-72.929684,17z/data=!3m1!4b1!4m5!3m4!1s0x89e7d84b45005aef:0x8cfc0fe0a0ceb073!8m2!3d41.3057378!4d-72.9274953';" class="w3-button w3-block w3-theme-dark w3-padding-16 w3-section w3-right"><i class="fas fa-map-marked-alt" style="width:30px"></i>Omni Location</button>
-
-        <button onclick="window.location.href = 'tel:12037726664';" class="w3-button w3-block w3-theme-dark w3-padding-16 w3-section w3-right"><i class="fas fa-phone" style="width:30px"></i>Omni Phone</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="ceremonyModal" class="w3-modal">
-    <div class="w3-modal-content w3-animate-top w3-card-4">
-      <header class="w3-container w3-theme-dark w3-center w3-padding-32"">
-        <span onclick="document.getElementById('ceremonyModal').style.display='none'"
-       class="w3-button w3-theme-dark w3-xlarge w3-display-topright">×</span>
-        <h4 class="w3-wide"><i class="fas fa-ring"></i>Ceremony</h4>
-        <p class="w3-opacity">Sat 6 June 2020</p>
-      </header>
-      <div class="w3-container">
-      
-        <p class="w3-opacity"><i class="far fa-clock" style="width:30px"></i>4:30-5:30pm</p>
-        <p><label>Family photos with the Bride and Groom in the Omni Hotel.</label></p>
-
-        <p class="w3-opacity"><i class="far fa-clock" style="width:30px"></i>5:30-6:00pm</p>
-        <p><label>Ceremony.</label></p>
-        
-        <button onclick="window.location.href = 'https://www.google.com/maps/place/Omni+New+Haven+Hotel+at+Yale/@41.3057378,-72.929684,17z/data=!3m1!4b1!4m5!3m4!1s0x89e7d84b45005aef:0x8cfc0fe0a0ceb073!8m2!3d41.3057378!4d-72.9274953';" class="w3-button w3-block w3-theme-dark w3-padding-16 w3-section w3-right"><i class="fas fa-map-marked-alt" style="width:30px"></i>Omni Location</button>
-
-        <button onclick="window.location.href = 'tel:12037726664';" class="w3-button w3-block w3-theme-dark w3-padding-16 w3-section w3-right"><i class="fas fa-phone" style="width:30px"></i>Omni Phone</button>
-      </div>
-    </div>
-  </div>
 
 
   <div id="activityModal" class="w3-modal">
@@ -279,106 +141,6 @@ h4 {font-family: "Tangerine";color: white;}
 
 
 
-
-  <!-- trip Section -->
-  <div class="w3-theme-l5" id="trip">
-    <div class="w3-container w3-content w3-padding-64" style="max-width:800px">
-
-
-
-      <div class="w3-row-padding w3-padding-32 w3-card" style="margin:0 -16px">
-      
-      
-        <h2 class="w3-wide w3-center">Planning your Trip</h2>
-        <p class="w3-opacity w3-center"><i>We appreciate you coming out to us to celebrate our marriage! If New Haven is a small city with a lot of great things near by. If you plan on staying in the downtown area (near the reception location) there is a wide variety of restaurants and bars to choose from, a grocery store, shopping, convience stores, and stuff to do all within walking distance. Here's a few tips to help you plan your trip.</i></p><br>
-
-
-
-        <div class="w3-third w3-margin-bottom">
-          <div class="w3-container w3-white w3-card">
-            <p><i class="fa fa-plane" style="width:30px"></i><b>Flying</b></p>
-            <p><b>New York</b>(LGA,JFK): While these airports tend to have cheaper flights New York is about a two hour drive from New Haven (depending on traffic).</p>
-            <p><b>Hartford</b>(BDL): This airport is one hour north of New Haven.</p>
-            <p><b>Tweed New Haven</b>(HVN): This is the smallest airport of the three. Every flight must take a layover in Philadelphia before connecting to New Haven. A short 10 minute drive from the New Haven Omni.</p>
-          </div>
-        </div>
-
-
-
-
-
-
-
-        <div class="w3-third w3-margin-bottom">
-          <div class="w3-container w3-white w3-card">
-            <p><i class="fa fa-bed"></i><b> Lodging</b></p>
-
-            <button onclick="window.location.href = 'https://www.google.com/maps/place/Omni+New+Haven+Hotel+at+Yale/@41.3057378,-72.929684,17z/data=!3m1!4b1!4m5!3m4!1s0x89e7d84b45005aef:0x8cfc0fe0a0ceb073!8m2!3d41.3057378!4d-72.9274953';" class="w3-button w3-block w3-theme-dark w3-padding-16 w3-section w3-right"><i class="far fa-building" style="width:30px"></i>Omni Hotel</button>
-            <p>The Omni has given us a block of 20 rooms at a rate of $209 a night (without parking). Each room sleeps two people.</p>
-            <button onclick="window.location.href = 'https://www.google.com/search?hotel_occupancy=2&hotel_dates=2019-05-26%2C2019-05-27&sz=0&tbm=lcl&ei=K6rXXMnTBIPH_Qb89YIw&q=New+Haven+Hotel&oq=New+Haven+Hotel&gs_l=psy-ab.3...0.0.0.4319.0.0.0.0.0.0.0.0..0.0....0...1c..64.psy-ab..0.0.0....0.OMY0okF4dSk#rlfi=hd:2019-05-26,2019-05-27;si:351667903931462953,y,DZm7zTrrFQU;mv:!1m2!1d41.3440977!2d-72.87039469999999!2m2!1d41.2778047!2d-72.9815825';" class="w3-button w3-block w3-theme-dark w3-padding-16 w3-section w3-right"><i class="far fa-building" style="width:30px"></i>New Haven Hotel</button>
-
-            <button onclick="window.location.href = 'https://www.google.com/search?hotel_occupancy=2&hotel_dates=2019-05-26%2C2019-05-27&sz=0&tbm=lcl&ei=SqrXXOrKI4e4gge_na3oAQ&q=Hampton+Inn+Suites+&oq=Hampton+Inn+Suites+&gs_l=psy-ab.3..0i20i263k1j0l9.104995.104995.0.105374.1.1.0.0.0.0.115.115.0j1.1.0....0...1c.2.64.psy-ab..0.1.114....0.avge7CqDe4w#rlfi=hd:2019-05-26,2019-05-27;si:4860571953452151841;mv:!1m2!1d41.3113259!2d-72.9144513!2m2!1d41.21820220000001!2d-73.13580689999999';" class="w3-button w3-block w3-theme-dark w3-padding-16 w3-section w3-right"><i class="far fa-building" style="width:30px"></i>Hampton Inn and Suites</button>
-
-            <button onclick="window.location.href = 'https://www.airbnb.com/s/New-Haven--CT--United-States/homes?refinement_paths%5B%5D=%2Fhomes&adults=2&children=0&checkin=2020-06-05&checkout=2020-06-07&allow_override%5B%5D=&zoom=15&search_by_map=true&sw_lat=41.29793460594665&sw_lng=-72.933824239719&ne_lat=41.31953302106666&ne_lng=-72.91564422701606&search_type=UNKNOWN&place_id=ChIJ5XCAOkTY54kR7WSyWcZUo_Y&s_tag=gZrkokny';" class="w3-button w3-block w3-theme-dark w3-padding-16 w3-section w3-right"><i class="far fa-building" style="width:30px"></i>Airbnb</button>
-
-          </div>
-        </div>
-        
-        
-        
-        
-        <div class="w3-third w3-margin-bottom">
-          <div class="w3-container w3-white w3-card">
-            <p><i class="fa fa-car" style="width:30px"></i><b>Ground Transportation</b></p>
-            <p><b>Car Rental</b>: While there will be plenty of different agencies at airports, New Haven has Alamo, National Car Rental, and Hertz.</p>
-            <p><b>Parking</b>: For those driving or renting a car just a warning parking in New Haven isn't cheap (~$20-30/day) in parking garages. There are hotels you can book a bit outside the city to avoid this.</p>
-            <p><b>Shuttles</b>: Shuttles to and from airports can be coordinated. In general if you're traveling with a large group this can save you some money especially considering the cost of parking.</p>
-          </div>
-        </div>
-
-
-
-
-
-
-
-        <div class="w3-third w3-margin-bottom">
-          <div class="w3-container w3-white w3-card">
-            <p><i class="fas fa-pizza-slice" style="width:30px"></i><b>Haze and Brad's Favorite Bites</b></p>
-            <p><b><a href="https://www.olivesandoil.com/">Olives and Oil</a></b>: Modern italian food, crudo bar, wood-fired pizza.</p>
-            <p><b>Barcelona</b>: Spanish tapas, great for V/VG and meat eaters.</p>
-            <p><b>Claire's Corner Copia</b>: A V/VG cafe serving fresh breakfast and lunch items. Great baked goods too!</p>
-            <p><b>Stowes Seafood</b>: A seafood shack that has one of the best hot lobster rolls around! (OK, well it's Brad's fav ...)</p>
-          </div>
-        </div>
-
-
-        <div class="w3-third w3-margin-bottom">
-          <div class="w3-container w3-white w3-card">
-            <p><i class="fas fa-glass-martini" style="width:30px"></i><b>Haze and Brad's Favorite Bars</b></p>
-            <p><b>Elm City Social</b>: Try the rubber ducky!</p>
-            <p><b>Ordinary</b>: Try the smokey cocktail.</p>
-            <p><b>The Beer Collective</b>: tons of brews.</p>
-            <p><b>Barcelona</b>: a great selection of Vino!</p>
-          </div>
-        </div>
-        
-        <div class="w3-third w3-margin-bottom">
-          <div class="w3-container w3-white w3-card">
-            <p><i class="fas fa-cat" style="width:30px"></i><b>Attractions</b></p>
-            <p><b>Louis Lunch</b>: An old school char grilled burger. Claims to be the first burger joint ever.</p>
-            <p><b>Yale's Campus</b>: Beautiful buildings, libraries, a cool cemetery.</p>
-            <p><b>Yale Art Museum</b>: Paintings from pretty much any known artist. Cool historical artifacts.</p>
-            <p><b>Sleeping Giant State Park</b>: About a half hour drive, great trails and rocks to climb.</p>
-            <p><b>East Rock Look Out</b>: Either walk up via trails or drive to the top to get a birds eye view of New Haven that extends to the ocean.</p>
-          </div>
-        </div>
-
-
-      </div>
-    </div>
-  </div>
-
   <!-- RSVP Section -->
   <div class="w3-container w3-content w3-padding-64 w3-theme-l4"  id="rsvp">
     <div class="w3-row w3-padding-32 w3-card">
@@ -388,28 +150,11 @@ h4 {font-family: "Tangerine";color: white;}
 
       <div class="w3-col m6 w3-large w3-margin-bottom w3-center">
       
-         <i class="fa fa-phone" style="width:30px"></i> Phone: (630)621-5857<br>
-         <i class="fa fa-envelope" style="width:30px"> </i> Email: bmagnett@gmail.com<br>
+         <i class="fa fa-phone" style="width:30px"></i> Phone: (###)###-####<br>
+         <i class="fa fa-envelope" style="width:30px"> </i> Email: email@gmail.com<br>
       </div>
       <div class="w3-col m6 w3-center">
-      
-      
-      <!--
-        <form action="/action_page.php" target="_blank">
-       
-            <input id="rsvp-n" class="w3-input w3-border" type="text" placeholder="Name(s)" required name="Message">
-            <input id="rsvp-e" class="w3-input w3-border" type="text" placeholder="Entre Choice: (Sea Bass,  Sirloin, Vegan)" required name="Message">
-            <input id="rsvp-yn" class="w3-input w3-border" type="text" placeholder="Will you be coming?" required name="Message">
-            <input id="rsvp-m" class="w3-input w3-border" type="text" placeholder="Message(Optional)" required name="Message">
-
-
-            <button id="rsvp" type="submit" class="rsvp">SEND</button>
-
-
-        </form>
-        -->
-      
-      
+          
 
         <form class="sucess-none" id="rsvp-form">
           <input type="text" class="w3-input w3-border" id="rsvp-n" placeholder="Name(s)">
@@ -438,8 +183,6 @@ h4 {font-family: "Tangerine";color: white;}
 
 <br>
 
-<!-- Image of location/map -->
-<img src="test.jpg" class="w3-image w3-greyscale-min" style="width:100%">
 
 
 
@@ -448,8 +191,12 @@ h4 {font-family: "Tangerine";color: white;}
 
 <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js"></script>
 <!-- Add Firebase products that you want to use -->
+
+
+<!--
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-storage.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-database.js"></script>
 
@@ -457,33 +204,20 @@ h4 {font-family: "Tangerine";color: white;}
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-
+-->
 
 <!-- https://discourse.skcript.com/t/how-do-i-create-a-contact-form-using-firebase-as-backend/392  -->
 
+<!--
 <script src="magnet.js"></script>
-
-
+-->
+<script src="https://bmagnetta.github.io/magnet/magnet.js"></script>
 
 
 
 
 <script>
-// Automatic Slideshow - change image every 4 seconds
-var myIndex = 0;
-carousel();
 
-function carousel() {
-  var i;
-  var x = document.getElementsByClassName("mySlides");
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";
-  }
-  myIndex++;
-  if (myIndex > x.length) {myIndex = 1}
-  x[myIndex-1].style.display = "block";
-  setTimeout(carousel, 4000);
-}
 
 // Used to toggle the menu on small screens when clicking on the menu button
 function myFunction() {
