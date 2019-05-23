@@ -6,23 +6,23 @@
 
 var script = document.createElement('script');
 script.src = 'https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js';
-document.getElementsByTagName('head')[0].appendChild(script);
+document.getElementsByTagName('body')[0].appendChild(script);
 
 var script = document.createElement('script');
 script.src = 'https://www.gstatic.com/firebasejs/5.9.4/firebase-storage.js';
-document.getElementsByTagName('head')[0].appendChild(script);
+document.getElementsByTagName('body')[0].appendChild(script);
 
 var script = document.createElement('script');
 script.src = 'https://www.gstatic.com/firebasejs/5.9.4/firebase-database.js';
-document.getElementsByTagName('head')[0].appendChild(script);
+document.getElementsByTagName('body')[0].appendChild(script);
 
 var script = document.createElement('script');
 script.src = 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js';
-document.getElementsByTagName('head')[0].appendChild(script);
+document.getElementsByTagName('body')[0].appendChild(script);
 
 var script = document.createElement('script');
 script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js';
-document.getElementsByTagName('head')[0].appendChild(script);
+document.getElementsByTagName('body')[0].appendChild(script);
 
 
 //---------------------
