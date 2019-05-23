@@ -4,6 +4,7 @@
 
 //LOAD  .js files here ... can't get to work though ... for now includ the following
 
+/*
 var script = document.createElement('script');
 script.src = 'https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js';
 document.getElementsByTagName('body')[0].appendChild(script);
@@ -23,7 +24,7 @@ document.getElementsByTagName('body')[0].appendChild(script);
 var script = document.createElement('script');
 script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js';
 document.getElementsByTagName('body')[0].appendChild(script);
-
+*/
 
 //---------------------
 
@@ -210,6 +211,18 @@ function carouselSchedule() {
   x[myIndex2-1].style.display = "block";
   setTimeout(carouselSchedule, 10000); // Change image every 2 seconds
 }
+
+//------------------------------
+
+/*
+function populateTest(name) {
+
+
+
+}
+*/
+
+
 
 
 
