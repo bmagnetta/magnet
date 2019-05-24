@@ -4,6 +4,31 @@
 
 //LOAD  .js files here ... can't get to work though ... for now includ the following
 
+/*
+var magnet_setup = document.getElementById("magnet-setup")
+
+
+var newScript = document.createElement("script");
+newScript.src = "https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js";
+magnet_setup.insertAdjacentElement("beforebegin", newScript);
+
+var newScript = document.createElement("script");
+newScript.src = "https://www.gstatic.com/firebasejs/5.9.4/firebase-storage.js";
+magnet_setup.insertAdjacentElement("beforebegin", newScript);
+
+var newScript = document.createElement("script");
+newScript.src = "https://www.gstatic.com/firebasejs/5.9.4/firebase-database.js";
+magnet_setup.insertAdjacentElement("beforebegin", newScript);
+
+var newScript = document.createElement("script");
+newScript.src = "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js";
+magnet_setup.insertAdjacentElement("beforebegin", newScript);
+
+var newScript = document.createElement("script");
+newScript.src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js";
+magnet_setup.insertAdjacentElement("beforebegin", newScript);
+*/
+
 
 
 //---------------------
@@ -34,31 +59,48 @@ $(document).ready(function() {
     }
   });
 });
-//If not empty submit on click
+
+
+document.getElementById("rsvp-submit").addEventListener("click", function(){
+    document.getElementById("form-response").innerHTML = "Thanks for responding!"
+});
+
+
+//remove jsquerry in future. replace with plain vanilla JS
+//https://www.sitepoint.com/jquery-document-ready-plain-javascript/
+//https://gist.github.com/joyrexus/7307312
+
+//If form is "ready" and has elements then submit
 $(document).ready(function() {
 if ($('#rsvp-form').length > 0 ) {
     rsvpSubmitScript();
 }
 });
 
-document.getElementById("rsvp-submit").addEventListener("click", function(){
-    document.getElementById("form-response").innerHTML = "Thanks for responding!"
-});
+
+
+
+
+
 
 function rsvpSubmitScript() {
 
     var b = firebase.database().ref("rsvp");
-        $("#rsvp-form").submit(function(config) { $(this), console.log("Submit rsvp to Firebase");
-        var n = $("#rsvp-n").val(),
-            en = $("#rsvp-en").val(),
-            yn = $("#rsvp-yn").val(),
-            m = $("#rsvp-m").val(),
-            f = { name: n, entre: en, status: yn, message:m};
-        return b.push(f).then(function(config) {
-            $(".sucess").css("display", "block"),
-            $(".sucess-none").css("display", "none") }), !1 })
-    
+    //what is the below script doing? $("#rsvp-n") retrieves this element.
+    //https://javascript.info/forms-submit explains form.submit()
+    $("#rsvp-form").submit(function() {
+        console.log("Submit rsvp to Firebase");
+        var n = $("#rsvp-n").val();
+        var en = $("#rsvp-en").val();
+        var yn = $("#rsvp-yn").val();
+        var m = $("#rsvp-m").val();
+        var f = { name: n, entre: en, status: yn, message:m};
+        return b.push(f)
+    , !1 })
+    // !1 prevents the form from moving position after submission
 }
+
+
 
 
 
@@ -67,19 +109,7 @@ function rsvpSubmitScript() {
 
 document.querySelector('.file-select').addEventListener('change', handleFileUploadChange);
 document.querySelector('.file-submit').addEventListener('click', handleFileUploadSubmit);
-document.querySelector('.rsvp').addEventListener('click', handleRSVPUploadSubmit);
 
-
-function handleRSVPUploadSubmit(){
-// add text to firebase dictionary
-firebase.database().ref('rsvp').push().set({
-  "name":document.getElementById('rsvp-n').value,
-  "entre":document.getElementById('rsvp-en').value,
-  "yesno":document.getElementById('rsvp-yn').value,
-  "message":document.getElementById('rsvp-m').value
-});
-
-}
 
 
 let selectedFile;
@@ -194,15 +224,153 @@ function carouselSchedule() {
 
 //------------------------------
 
-/*
-function populateTest(name) {
+function populateTest(div_name,input_names) {
+    //div_name == id of element in website, path in database
+    //magnet_api_key, in setup instructions, included in code snippet.
+
+    var card_name = div_name+"-card";
+    var form_name = div_name+"-form";
+
+    //---Given skeleton div, build a form
+    var card = document.createElement("DIV");
+    card.setAttribute("id", card_name);
+    card.setAttribute("class", "w3-row w3-padding-32 w3-card w3-center");
+    document.getElementById(div_name).appendChild(card);
+
+
+    var form = document.createElement("FORM");
+    form.setAttribute("id", form_name);
+    form.setAttribute("class", "sucess-none");
+    document.getElementById(card_name).appendChild(form);
+
+    var i;
+    for (i = 0; i < input_names.length; i++) {
+        var y = document.createElement("INPUT");
+        y.setAttribute("type", "text");
+        y.setAttribute("placeholder", input_names[i]);
+        y.setAttribute("id", form_name+input_names[i]);
+        y.setAttribute("class", "w3-input w3-border");
+        document.getElementById(form_name).appendChild(y);
+    };
+    
+    
+    var button = document.createElement("INPUT");
+    button.setAttribute("type", "submit");
+    button.setAttribute("id", "submit-test");
+    button.setAttribute("class", "btn");
+    button.setAttribute("value", "Submit");
+    document.getElementById(form_name).appendChild(button);
+
+    console.log("calling buildTest");
+    
+    //If form is "ready" and has elements then submit
+    $(document).ready(function() {
+        console.log("calling ready");
+
+        if ($('#'+form_name).length > 0 ) {
+            SubmitTestValidate(div_name,form_name,input_names);
+        }
+    });
 
 
 
 }
-*/
+
+function SubmitTestValidate(div_name,form_name,input_names) {
+
+    var api_ref = firebase.database().ref("api_key/"+magnet_api_key);
+    api_ref.once('value', function(snapshot) {
+      if (snapshot.exists()) {
+        console.log("magnet_api_key is valid");
+        SubmitTest(div_name,form_name,input_names)
+      }
+      else {
+        console.log("magnet_api_key is invalid");
+      }
+
+    });
+
+}
 
 
 
+
+function SubmitTest(div_name,form_name,input_names) {
+    console.log("calling SubmitTest");
+    
+
+    var b = firebase.database().ref("data/"+magnet_api_key+"/"+div_name);
+    //what is the below script doing? $("#rsvp-n") retrieves this element.
+    //https://javascript.info/forms-submit explains form.submit()
+    $('#'+form_name).submit(function() {
+        console.log("Submit rsvp to Firebase");
+        var f = {};
+        for (i = 0; i < input_names.length; i++) {
+            f[input_names[i]]=$('#'+form_name+input_names[i]).val()
+        };
+        console.log(f);
+        return b.push(f)
+    , !1 })
+    // !1 prevents the form from moving position after submission
+}
+
+
+//------Visualization----------------
+
+function VisualizationTestValidate(vis_title,vis_name,form_name) {
+
+    document.getElementById(vis_title).innerHTML = form_name;
+
+    var api_ref = firebase.database().ref("api_key/"+magnet_api_key);
+    api_ref.once('value', function(snapshot) {
+      if (snapshot.exists()) {
+        console.log("magnet_api_key is valid");
+        VisualizationTest(vis_name,form_name)
+      }
+      else {
+        console.log("magnet_api_key is invalid");
+      }
+
+    });
+
+}
+
+
+function VisualizationTest(vis_name,form_name) {
+    console.log("calling VisualizationTest");
+    
+    var b = firebase.database().ref("data/"+magnet_api_key+"/"+form_name);
+    
+    b.once('value', function(snapshot) {
+
+        var txt = "";
+        txt += "<table border='1'>"
+        
+        snapshot.forEach(function(childSnapshot) {
+            // key will be "ada" the first time and "alan" the second time
+            var key = childSnapshot.key;
+            txt += "<tr>"+"<td>" + key + "</td>"+"</tr>";
+            // childData will be the actual contents of the child
+            var childData = childSnapshot.val();
+            for (var key in childData){
+                txt += "<tr>"+"<td>" + key + "</td>"+"<td>" + childData[key] + "</td>"+"</tr>";
+
+
+            }
+
+
+
+
+        });
+
+        txt += "</table>"
+        
+        console.log(txt)
+        document.getElementById(vis_name).innerHTML = txt;
+
+    });
+
+
+}
 
 
