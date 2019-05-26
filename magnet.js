@@ -302,9 +302,10 @@ function handlePhotoUploadSubmit(e) {
     //only upload if
     if (e.target.innerText != 'Posted' && e.target.innerText != '') {
     
+    
         var div_name = e.target.name;
         var selectedFile = window.photoSelected[div_name];
-        e.target.innerText = 'Posted';
+
 
         var rn1 = Math.floor(Math.random() * 20);
         var rn2 = Math.floor(Math.random() * 20);
@@ -318,15 +319,20 @@ function handlePhotoUploadSubmit(e) {
         uploadTask.on('state_changed', (snapshot) => {
         // Observe state change events such as progress, pause, and resume
         }, (error) => {
-          // Handle unsuccessful uploads
-          console.log(error);
+            // Handle unsuccessful uploads
+            console.log("photo upload failed");
+            console.log(error);
         }, () => {
-           // Do something once upload is complete
-           console.log('success');
-        });
-        // add file name to firebase database
-        firebase.database().ref("data/"+window.magnet_api_key+"/"+div_name).push().set({
-          filename:rid+selectedFile.name
+            // Do something once upload is complete
+            console.log("photo upload sucess");
+            // add file name to firebase database
+            firebase.database().ref("data/"+window.magnet_api_key+"/"+div_name).push().set({
+              filename:rid+selectedFile.name
+            });
+        
+            //update button to say posted. show success
+            e.target.innerText = 'Posted';
+ d
         });
 
     }
@@ -387,7 +393,7 @@ window.pullKey= "";
 window.pullPSapi= "";
 window.pullFilename= "";
 
-function pullImageData2(div_name,img_id) {
+function pullImageDataVis(div_name,img_id) {
     var ref = firebase.database().ref("data/"+window.magnet_api_key+"/"+div_name);
     ref.on('value', function(snapshot) {
     
@@ -445,20 +451,20 @@ function pullImageData2(div_name,img_id) {
 
 function SkipPhoto(){
     console.log("called skipphoto");
-    pullImageData2(window.pullPSapi,"demo-img");
+    pullImageDataVis(window.pullPSapi,"demo-img");
 }
 function RemovePhoto(){
-    var c = firebase.database().ref("data/"+window.magnet_api_key+"/"+window.pullPSapi+"/"+window.pullKey);
-    c.remove();
-    console.log(window.pullFilename);
     // Create a reference to the file to delete
     var desertRef = storageRef.child(window.magnet_api_key+"/"+window.pullFilename);
-
     // Delete the file
     desertRef.delete().then(function() {
-      // File deleted successfully
+        // Photo deleted successfully. Now delete database reference
+        var c = firebase.database().ref("data/"+window.magnet_api_key+"/"+window.pullPSapi+"/"+window.pullKey);
+        c.remove();
+        //console.log(window.pullFilename);
     }).catch(function(error) {
       // Uh-oh, an error occurred!
+      console.log("photo delete failed")
     });
 }
 
@@ -489,7 +495,7 @@ function VisualizePhotoValidate(vis_title,img_id,ps_name) {
 
 function VisualizePhoto(vis_title,img_id,ps_name) {
 
-    pullImageData2(ps_name,img_id)
+    pullImageDataVis(ps_name,img_id)
 
 }
 
