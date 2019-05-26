@@ -53,10 +53,11 @@ const storageRef = storageService.ref();
 
 
 
+/*
 document.getElementById("rsvp-submit").addEventListener("click", function(){
     document.getElementById("form-response").innerHTML = "Thanks for responding!"
 });
-
+*/
 
 //remove jsquerry in future. replace with plain vanilla JS
 //https://www.sitepoint.com/jquery-document-ready-plain-javascript/
@@ -381,10 +382,116 @@ function pullImageData(div_name,img_id) {
 }
 
 
+window.pullIndex = 0;
+window.pullKey= "";
+window.pullPSapi= "";
+window.pullFilename= "";
+
+function pullImageData2(div_name,img_id) {
+    var ref = firebase.database().ref("data/"+window.magnet_api_key+"/"+div_name);
+    ref.on('value', function(snapshot) {
+    
+        var photo_booth_filenames = [];
+        var keys = [];
+        //loop through each push-id which are unkown values
+        snapshot.forEach(function(childSnapshot) {
+            // key = push-id which are unkown values
+            var key = childSnapshot.key;
+            // the actual filename str value
+            window.pullKey = key;
+            var filename = childSnapshot.child("filename").val();
+            //listen and populate the full filename array
+            photo_booth_filenames.push(filename);
+            keys.push(key);
+        });
+        //console.log(photo_booth_filenames);
+        var sub = photo_booth_filenames[window.pullIndex];
+        window.pullPSapi= div_name;
+        window.pullKey = keys[window.pullIndex];
+        window.pullFilename= sub;
+        //console.log(sub);
+
+        storageRef.child(window.magnet_api_key+"/"+sub).getDownloadURL().then(function(url) {
+            // This can be downloaded directly:
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+            xhr.onload = function(event) {
+                var blob = xhr.response;
+            };
+            xhr.open('GET', url);
+            xhr.send();
+
+            // Or inserted into an <img> element:
+            var img = document.getElementById(img_id);
+            img.src = url;
+        }).catch(function(error) {
+            // Handle any errors
+            console.log("Error: downloadRandomImage")
+        });
+
+        if (window.pullIndex < photo_booth_filenames.length-1){
+            window.pullIndex = window.pullIndex +1;
+        } else {
+            window.pullIndex = 0;
+        }
+
+    });
+
+}
 
 
 
+//--------------------------------------
 
+function SkipPhoto(){
+    console.log("called skipphoto");
+    pullImageData2(window.pullPSapi,"demo-img");
+}
+function RemovePhoto(){
+    var c = firebase.database().ref("data/"+window.magnet_api_key+"/"+window.pullPSapi+"/"+window.pullKey);
+    c.remove();
+    console.log(window.pullFilename);
+    // Create a reference to the file to delete
+    var desertRef = storageRef.child(window.magnet_api_key+"/"+window.pullFilename);
+
+    // Delete the file
+    desertRef.delete().then(function() {
+      // File deleted successfully
+    }).catch(function(error) {
+      // Uh-oh, an error occurred!
+    });
+}
+
+
+function VisualizePhotoValidate(vis_title,img_id,ps_name) {
+
+    document.getElementById(vis_title).innerHTML = ps_name;
+    document.getElementById("demo-skip").addEventListener('click', SkipPhoto);
+    document.getElementById("demo-remove").addEventListener('click', RemovePhoto);
+
+
+    var api_ref = firebase.database().ref("api_key/"+window.magnet_api_key);
+    api_ref.once('value', function(snapshot) {
+      if (snapshot.exists()) {
+        console.log("window.magnet_api_key is valid");
+        //get validation token
+        VisualizePhoto(vis_title,img_id,ps_name)
+
+      }
+      else {
+        console.log("window.magnet_api_key is invalid");
+      }
+
+    });
+
+}
+
+
+function VisualizePhoto(vis_title,img_id,ps_name) {
+
+    pullImageData2(ps_name,img_id)
+
+}
 
 //============================================================
 //
@@ -506,6 +613,7 @@ function VisualizeFormValidate(vis_title,vis_name,form_name) {
     api_ref.once('value', function(snapshot) {
       if (snapshot.exists()) {
         console.log("window.magnet_api_key is valid");
+        //get validation token
         VisualizeForm(vis_name,form_name)
       }
       else {
@@ -515,6 +623,19 @@ function VisualizeFormValidate(vis_title,vis_name,form_name) {
     });
 
 }
+
+
+function RemoveFormEntry(form_name,key) {
+    //console.log("calling RemoveFormEntry")
+    //console.log(form_name)
+    //console.log(key)
+    var c = firebase.database().ref("data/"+window.magnet_api_key+"/"+form_name+"/"+key);
+    c.remove();
+    //loop through and delete table is more efficient
+    //simply reload webpage will suffice for now
+    location.reload();
+}
+
 
 function VisualizeForm(vis_name,form_name) {
     console.log("calling VisualizationTest");
@@ -530,7 +651,7 @@ function VisualizeForm(vis_name,form_name) {
             // key will be "ada" the first time and "alan" the second time
             var key = childSnapshot.key;
             button_ids.push(key);
-            txt += "<tr>"+"<td>" + key + "</td>"+"<td>" + "<button class='w3-button w3-hover-red'"+"id="+key+">remove</button>" + "</td>"+"</tr>";
+            txt += "<tr>"+"<td>" + key + "</td>"+"<td>" + "<button class='w3-button w3-hover-red' onclick=RemoveFormEntry('"+form_name+"','"+key+"')>remove</button>" + "</td>"+"</tr>";
             // childData will be the actual contents of the child
             var childData = childSnapshot.val();
             for (var key in childData){
@@ -545,18 +666,8 @@ function VisualizeForm(vis_name,form_name) {
         //console.log(txt)
         document.getElementById(vis_name).innerHTML = txt;
         
-        
-        /*
-        for (var key in button_ids){
-            document.getElementById(key).addEventListener("click", function(){
-                
-                var c = firebase.database().ref("data/"+window.magnet_api_key+"/"+form_name+"/"+key);
-                c.remove();
-                
-            });
-        }
-        */
-        
+
+
     });
 }
 

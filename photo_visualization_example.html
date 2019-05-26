@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+
+
+<div class="w3-container w3-content w3-padding-64 w3-theme-l4 w3-half w3-center" id="demo-container">
+<h2 id="demo-title"></h2>
+
+<img id="demo-img" style="width:100%"></img>
+
+<button id="demo-skip">skip</button>
+<button id="demo-remove">remove</button>
+
+</div>
+
+
+
+
+
+<!--
+https://www.w3schools.com/js/js_json_intro.asp
+
+https://www.w3schools.com/js/tryit.asp?filename=tryjson_html_table
+
+-->
+
+
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-database.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+<script src="magnet.js" id="magnet-setup"></script>
+<!--
+<script src="https://bmagnetta.github.io/magnet/magnet.js"></script>
+-->
+
+
+<script>
+window.magnet_api_key = "12345QQSDRT";
+var ps1_key = "test3";
+VisualizePhotoValidate("demo-title","demo-img",ps1_key)
+</script>
+
+
+
+</body>
+</html>
+
