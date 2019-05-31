@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+
+
+
+<!--
+https://www.w3schools.com/w3css/w3css_display.asp
+-->
+
+<!--
+https://firebase.google.com/docs/auth/web/google-signin
+-->
+
+<div class="w3-container" id="test">
+  <h1>Using w3-display-container</h1>
+
+  <div class="w3-display-container w3-green" style="height:300px;">
+    <div class="w3-display-topleft">Top Left</div>
+    <div class="w3-display-topright">Top Right</div>
+    <div class="w3-display-bottomleft">Bottom Left</div>
+    <div class="w3-display-bottomright">Bottom Right</div>
+    <div class="w3-display-left">Left</div>
+    <div class="w3-display-right">Right</div>
+    <div class="w3-display-middle">Middle</div>
+    <div class="w3-display-topmiddle w3-hide-small">Top Middle</div>
+    <div class="w3-display-bottommiddle w3-show">Bottom Middle</div>
+  </div>
+</div>
+
+<button onclick="myFunction()">Click me</button>
+
+
+<script>
+function myFunction(){
+    //document.getElementById('test').innerText = 'Changed Text';
+    document.getElementById('test').className = "w3-hide";
+}
+</script>
+
+
+<!--
+https://www.w3schools.com/js/js_json_intro.asp
+
+https://www.w3schools.com/js/tryit.asp?filename=tryjson_html_table
+
+-->
+
+
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-database.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+<script src="magnet.js" id="magnet-setup"></script>
+<!--
+<script src="https://bmagnetta.github.io/magnet/magnet.js"></script>
+-->
+
+
+<script>
+var magnet_api_key = "12345QQSDRT";
+var f1_key = "test1";
+//VisualizeFormValidate("demo-title","demo-table",f1_key)
+</script>
+
+
+
+</body>
+</html>
+
