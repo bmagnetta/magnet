@@ -42,6 +42,7 @@ projectId: "wedweb-67168",
 storageBucket: "wedweb-67168.appspot.com",
 messagingSenderId: "1049950905472"
 };
+
 firebase.initializeApp(config);
 const storageService = firebase.storage();
 const storageRef = storageService.ref();
@@ -210,7 +211,7 @@ window.photoSelected = {};
 
 function BuildPhotoFeed(div_name) {
     //div_name == id of element in website, path in database
-    //window.magnet_api_key, in setup instructions, included in code snippet.
+    //window.magnet_user, in setup instructions, included in code snippet.
 
     window.photoScrolls[div_name]=1//set global index book keeping variable.
     window.photoSelected[div_name]=""//set global structure for keep track of selected file for each feed.
@@ -246,7 +247,7 @@ function BuildPhotoFeed(div_name) {
     submit.setAttribute("class", "file-submit");
     submit.setAttribute("name", div_name);
     submit.innerText = '';
-    submit.addEventListener('click', handlePhotoUploadSubmit);
+    submit.addEventListener('click', handlePhotoUploadValidate);
     document.getElementById(div_name).appendChild(submit);
     
 }
@@ -297,12 +298,37 @@ function handlePhotoUploadChange(e) {
 
 }
 
+
+function handlePhotoUploadValidate(e) {
+
+    var api_ref = firebase.database().ref("users/"+window.magnet_user);
+    api_ref.once('value', function(snapshot) {
+      if (snapshot.exists()) {
+        console.log("window.magnet_user is valid");
+        if (snapshot.child("pforms").child("plan_cnt").val()>snapshot.child("pforms").child("used_cnt").val()){
+            console.log("You still have submissions for the month");
+
+            handlePhotoUploadSubmit(e)
+
+        } else {
+            console.log("You've reached your max number of submissions for the month");
+        }
+
+      }
+      else {
+        console.log("window.magnet_user is invalid");
+      }
+
+    });
+
+}
+
+
 function handlePhotoUploadSubmit(e) {
     
     //only upload if
     if (e.target.innerText != 'Posted' && e.target.innerText != '') {
-    
-    
+        
         var div_name = e.target.name;
         var selectedFile = window.photoSelected[div_name];
 
@@ -315,7 +341,7 @@ function handlePhotoUploadSubmit(e) {
 
         var rid = rn1.toString()+rn2.toString()+rn3.toString()+rn4.toString()+rn5.toString();
 
-        const uploadTask = storageRef.child(`${window.magnet_api_key}/${rid+selectedFile.name}`).put(selectedFile); //create a child directory called images, and place the file inside this directory
+        const uploadTask = storageRef.child(`${window.magnet_user}/${rid+selectedFile.name}`).put(selectedFile); //create a child directory called images, and place the file inside this directory
         uploadTask.on('state_changed', (snapshot) => {
         // Observe state change events such as progress, pause, and resume
         }, (error) => {
@@ -326,13 +352,24 @@ function handlePhotoUploadSubmit(e) {
             // Do something once upload is complete
             console.log("photo upload sucess");
             // add file name to firebase database
-            firebase.database().ref("data/"+window.magnet_api_key+"/"+div_name).push().set({
+            firebase.database().ref("data/"+window.magnet_user+"/"+div_name).push().set({
               filename:rid+selectedFile.name
             });
         
             //update button to say posted. show success
             e.target.innerText = 'Posted';
- d
+            
+            //Add count traffic here
+            var c = firebase.database().ref("users/"+window.magnet_user+"/pforms");
+            c.once('value', function(snapshot) {
+                var v = snapshot.child("used_cnt").val();
+                var d = firebase.database().ref("users/"+window.magnet_user+"/pforms/used_cnt");
+                d.set(v+1);
+                console.log("updated the used_cnt by one");
+            });
+
+
+
         });
 
     }
@@ -344,7 +381,7 @@ function handlePhotoUploadSubmit(e) {
 
 
 function pullImageData(div_name,img_id) {
-    var ref = firebase.database().ref("data/"+window.magnet_api_key+"/"+div_name);
+    var ref = firebase.database().ref("data/"+window.magnet_user+"/"+div_name);
     ref.on('value', function(snapshot) {
       var photo_booth_filenames = [];
       //loop through each push-id which are unkown values
@@ -361,7 +398,7 @@ function pullImageData(div_name,img_id) {
       
       function downloadRandomImage(photo_booth_filenames,img_id) {
         //console.log("calling downloadRandomImage");
-        storageRef.child(window.magnet_api_key+"/"+_.sample(photo_booth_filenames)).getDownloadURL().then(function(url) {
+        storageRef.child(window.magnet_user+"/"+_.sample(photo_booth_filenames)).getDownloadURL().then(function(url) {
           // This can be downloaded directly:
           var xhr = new XMLHttpRequest();
           xhr.responseType = 'blob';
@@ -394,7 +431,7 @@ window.pullPSapi= "";
 window.pullFilename= "";
 
 function pullImageDataVis(div_name,img_id) {
-    var ref = firebase.database().ref("data/"+window.magnet_api_key+"/"+div_name);
+    var ref = firebase.database().ref("data/"+window.magnet_user+"/"+div_name);
     ref.on('value', function(snapshot) {
     
         var photo_booth_filenames = [];
@@ -415,10 +452,15 @@ function pullImageDataVis(div_name,img_id) {
         window.pullPSapi= div_name;
         window.pullKey = keys[window.pullIndex];
         window.pullFilename= sub;
-        //console.log(sub);
+        console.log(sub);
 
-        storageRef.child(window.magnet_api_key+"/"+sub).getDownloadURL().then(function(url) {
+        console.log(window.magnet_user+"/"+sub);
+
+        storageRef.child(window.magnet_user+"/"+sub).getDownloadURL().then(function(url) {
             // This can be downloaded directly:
+            
+            console.log("sucessfull downloaded an image")
+
             var xhr = new XMLHttpRequest();
             xhr.responseType = 'blob';
             xhr.onload = function(event) {
@@ -440,6 +482,8 @@ function pullImageDataVis(div_name,img_id) {
         } else {
             window.pullIndex = 0;
         }
+        
+        console.log(window.pullIndex);
 
     });
 
@@ -449,17 +493,19 @@ function pullImageDataVis(div_name,img_id) {
 
 //--------------------------------------
 
-function SkipPhoto(){
-    console.log("called skipphoto");
-    pullImageDataVis(window.pullPSapi,"demo-img");
+function SkipPhoto(img_id){
+    //console.log("called skipphoto");
+    //console.log(window.pullPSapi);
+    //console.log(img_id);
+    pullImageDataVis(window.pullPSapi,img_id);
 }
 function RemovePhoto(){
     // Create a reference to the file to delete
-    var desertRef = storageRef.child(window.magnet_api_key+"/"+window.pullFilename);
+    var desertRef = storageRef.child(window.magnet_user+"/"+window.pullFilename);
     // Delete the file
     desertRef.delete().then(function() {
         // Photo deleted successfully. Now delete database reference
-        var c = firebase.database().ref("data/"+window.magnet_api_key+"/"+window.pullPSapi+"/"+window.pullKey);
+        var c = firebase.database().ref("data/"+window.magnet_user+"/"+window.pullPSapi+"/"+window.pullKey);
         c.remove();
         //console.log(window.pullFilename);
     }).catch(function(error) {
@@ -469,23 +515,24 @@ function RemovePhoto(){
 }
 
 
-function VisualizePhotoValidate(vis_title,img_id,ps_name) {
+function VisualizePhotoValidate(img_id,rem_id,skip_id,ps_name) {
 
-    document.getElementById(vis_title).innerHTML = ps_name;
-    document.getElementById("demo-skip").addEventListener('click', SkipPhoto);
-    document.getElementById("demo-remove").addEventListener('click', RemovePhoto);
+    //document.getElementById(vis_title).innerHTML = ps_name;
+    //document.getElementById(skip_id).addEventListener('click', SkipPhoto);
+    document.getElementById(skip_id).setAttribute("onclick","SkipPhoto('"+img_id+"')");
+    document.getElementById(rem_id).addEventListener('click', RemovePhoto);
 
 
-    var api_ref = firebase.database().ref("api_key/"+window.magnet_api_key);
+    var api_ref = firebase.database().ref("users/"+window.magnet_user);
     api_ref.once('value', function(snapshot) {
       if (snapshot.exists()) {
-        console.log("window.magnet_api_key is valid");
+        console.log("window.magnet_user is valid");
         //get validation token
-        VisualizePhoto(vis_title,img_id,ps_name)
+        VisualizePhoto(img_id,ps_name)
 
       }
       else {
-        console.log("window.magnet_api_key is invalid");
+        console.log("window.magnet_user is invalid");
       }
 
     });
@@ -493,7 +540,7 @@ function VisualizePhotoValidate(vis_title,img_id,ps_name) {
 }
 
 
-function VisualizePhoto(vis_title,img_id,ps_name) {
+function VisualizePhoto(img_id,ps_name) {
 
     pullImageDataVis(ps_name,img_id)
 
@@ -511,7 +558,7 @@ function VisualizePhoto(vis_title,img_id,ps_name) {
 
 function BuildForm(div_name,input_names) {
     //div_name == id of element in website, path in database
-    //window.magnet_api_key, in setup instructions, included in code snippet.
+    //window.magnet_user, in setup instructions, included in code snippet.
 
     var card_name = div_name+"-card";
     var form_name = div_name+"-form";
@@ -563,14 +610,22 @@ function BuildForm(div_name,input_names) {
 
 function SubmitFormValidate(div_name,form_name,input_names) {
 
-    var api_ref = firebase.database().ref("api_key/"+window.magnet_api_key);
+    var api_ref = firebase.database().ref("users/"+window.magnet_user);
     api_ref.once('value', function(snapshot) {
       if (snapshot.exists()) {
-        console.log("window.magnet_api_key is valid");
-        SubmitForm(div_name,form_name,input_names)
+        console.log("window.magnet_user is valid");
+        if (snapshot.child("forms").child("plan_cnt").val()>snapshot.child("forms").child("used_cnt").val()){
+            console.log("You still have submissions for the month");
+
+            SubmitForm(div_name,form_name,input_names)
+        } else {
+            console.log("You've reached your max number of submissions for the month");
+
+        }
+
       }
       else {
-        console.log("window.magnet_api_key is invalid");
+        console.log("window.magnet_user is invalid");
       }
 
     });
@@ -581,7 +636,7 @@ function SubmitForm(div_name,form_name,input_names) {
     console.log("calling SubmitTest");
     
 
-    var b = firebase.database().ref("data/"+window.magnet_api_key+"/"+div_name);
+    var b = firebase.database().ref("data/"+window.magnet_user+"/"+div_name);
     //what is the below script doing? $("#rsvp-n") retrieves this element.
     //https://javascript.info/forms-submit explains form.submit()
     $('#'+form_name).submit(function() {
@@ -591,6 +646,16 @@ function SubmitForm(div_name,form_name,input_names) {
             f[input_names[i]]=$('#'+form_name+input_names[i]).val()
         };
         console.log(f);
+        //Keep track of traffic
+        var c = firebase.database().ref("users/"+window.magnet_user+"/forms");
+        c.once('value', function(snapshot) {
+            var v = snapshot.child("used_cnt").val();
+            var d = firebase.database().ref("users/"+window.magnet_user+"/forms/used_cnt");
+            d.set(v+1);
+            console.log("updated the used_cnt by one");
+        });
+
+
         return b.push(f)
     , !1 })
     // !1 prevents the form from moving position after submission
@@ -611,19 +676,19 @@ $(document).ready(function() {
 //---Visualize Forms
 //--------------------------------
 
-function VisualizeFormValidate(vis_title,vis_name,form_name) {
+function VisualizeFormValidate(vis_name,form_name) {
 
-    document.getElementById(vis_title).innerHTML = form_name;
+    //document.getElementById(vis_title).innerHTML = form_name;
 
-    var api_ref = firebase.database().ref("api_key/"+window.magnet_api_key);
+    var api_ref = firebase.database().ref("users/"+window.magnet_user);
     api_ref.once('value', function(snapshot) {
       if (snapshot.exists()) {
-        console.log("window.magnet_api_key is valid");
+        console.log("window.magnet_user is valid");
         //get validation token
         VisualizeForm(vis_name,form_name)
       }
       else {
-        console.log("window.magnet_api_key is invalid");
+        console.log("window.magnet_user is invalid");
       }
 
     });
@@ -635,18 +700,18 @@ function RemoveFormEntry(form_name,key) {
     //console.log("calling RemoveFormEntry")
     //console.log(form_name)
     //console.log(key)
-    var c = firebase.database().ref("data/"+window.magnet_api_key+"/"+form_name+"/"+key);
+    var c = firebase.database().ref("data/"+window.magnet_user+"/"+form_name+"/"+key);
     c.remove();
     //loop through and delete table is more efficient
-    //simply reload webpage will suffice for now
-    location.reload();
+    //simply recall complete data download. inefficient but works for now.
+    GetFormData(form_name);
 }
 
 
 function VisualizeForm(vis_name,form_name) {
     console.log("calling VisualizationTest");
     
-    var b = firebase.database().ref("data/"+window.magnet_api_key+"/"+form_name);
+    var b = firebase.database().ref("data/"+window.magnet_user+"/"+form_name);
     
     b.once('value', function(snapshot) {
 

@@ -273,13 +273,17 @@ https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_startup
   </div>
 </div>
 
-<!-- login Section -->
-<div class="w3-container w3-center w3-dark-grey w3-hide" style="padding:128px 16px" id="login">
-  <h3>Login</h3>
-  <h3 id="login-user"></h3>
-  <p class="w3-large">Welcome again. Manage your account, data, etc ...</p>
-  <button class="w3-button w3-black" onclick="hideLogin()">Log Out</button>
-</div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -325,6 +329,345 @@ https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_templates_startup
   <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
 </footer>
 
+
+
+
+
+
+
+
+
+
+
+<!--
+    <img src="nhv_green.jpg" alt="Jeans" style="width:100%">
+ 
+             <button class="w3-button w3-green" style="width:100%">PForm title</button>
+            <button class="w3-button w3-green" style="width:100%">PForm title</button>
+            <button class="w3-button w3-green" style="width:100%">PForm title</button>
+            <button class="w3-button w3-green" style="width:100%">PForm title</button>
+            <button class="w3-button w3-green" style="width:100%">PForm title</button>
+
+ 
+-->
+
+
+<!-- login Section -->
+<div class="w3-container w3-center w3-dark-grey w3-hide" style="padding:128px 16px" id="login">
+
+    <h3 id="login-user"></h3>
+
+    <div class="vertical-menu w3-quarter w3-white" id="db-content-nav">
+        <button class="w3-button w3-green" style="width:100%">Settings</button>
+        <button class="w3-button w3-green" style="width:100%" onclick="hideLogin()">Log Out</button>
+        <div class="w3-container" id="db-content-nav-forms">
+            <p class="w3-center" style="width:100%">Forms</p>
+        </div>
+        <div class="w3-container" id="db-content-nav-pforms">
+            <p class="w3-center" style="width:100%">PForms</p>
+        </div>
+
+    </div>
+
+
+  <!-- Image header -->
+  <div class="w3-display-container w3-container w3-threequarter w3-black">
+
+    <!-- Top header -->
+    <header class="w3-container" style="height:50px">
+    <p class="w3-center">Welcome again. Manage your account, data, etc ...</p>
+    </header>
+
+    <div class="w3-display-container w3-container w3-blue vertical-menu-content" id="db-content">
+
+    </div>
+
+  </div>
+  
+</div>
+
+
+
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-database.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+
+<script src="magnet.js" id="magnet-setup"></script>
+
+
+<!--
+<script src="magnet_admin.js" id="magnet-setup"></script>
+
+<script src="https://bmagnetta.github.io/magnet/magnet.js"></script>
+-->
+
+
+<script>
+
+
+function getFormNames(email){
+    console.log("calling getFormNames")
+
+    var b = firebase.database().ref("data/"+email);
+    
+    b.once("value")
+      .then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+
+            // key will be the form names
+            var key = childSnapshot.key;
+            var value = childSnapshot.val();
+            var firstvaluekey = Object.keys(value)[0];
+            var secondvaluekey = Object.keys(value[firstvaluekey])[0];
+
+            console.log(secondvaluekey);
+
+            
+            //create a button for each child == form name
+            var butt = document.createElement("BUTTON");
+            butt.setAttribute("id", key);
+            butt.setAttribute("class", "w3-button w3-green");
+            butt.setAttribute("style", "width:100%");
+            butt.innerText = key;
+
+            //Add button in the correct nav place
+            if (secondvaluekey == 'filename'){
+                //form of type pform
+                butt.setAttribute("onclick","GetPformData('"+key+"')");
+                document.getElementById("db-content-nav-pforms").appendChild(butt)
+            } else {
+                //form of type form
+                butt.setAttribute("onclick","GetFormData('"+key+"')");
+                document.getElementById("db-content-nav-forms").appendChild(butt)
+            }
+
+      });
+
+    });
+    
+
+}
+
+
+function cleanNavDivs(){
+    var myNode = document.getElementById("db-content-nav-pforms");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
+    var para = document.createElement("p");
+    para.innerText = "Pforms"
+    para.setAttribute("style", "width:100%");
+    myNode.appendChild(para)
+
+    var myNode = document.getElementById("db-content-nav-forms");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
+    var para = document.createElement("p");
+    para.innerText = "Forms"
+    para.setAttribute("style", "width:100%");
+    myNode.appendChild(para)
+}
+
+
+/*
+
+function showLogin(){
+    cleanNavDivs();
+
+    console.log("calling showLogin()");
+
+    var provider = new firebase.auth.GoogleAuthProvider();
+    
+    firebase.auth().signInWithPopup(provider).then(function(result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        console.log(user);
+        
+        var email = user.email.replace(".", "!");
+                
+        // Test for the existence of users/email
+        var ref = firebase.database().ref("users/"+email);
+        ref.once("value")
+          .then(function(snapshot) {
+            if (snapshot.exists() == false){
+                // new user to create space on database
+                firebase.database().ref('users/' + email).set({
+                    forms: {used_cnt:0,plan_cnt:20},
+                    pforms: {used_cnt:0,plan_cnt:20}
+                });
+                // update the UI
+                document.getElementById('login').className = "w3-container w3-center w3-dark-grey w3-show";
+                document.getElementById('login-user').innerText = email;
+                window.location.hash = "login";
+            } else {
+                // existing user, pull down info from database
+            
+                // update the UI
+                getFormNames(email);
+                document.getElementById('login').className = "w3-container w3-center w3-dark-grey w3-show";
+                document.getElementById('login-user').innerText = user.email;
+                window.location.hash = "login";
+
+            }
+          });
+
+
+    }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+        console.log(error);
+    });
+
+
+}
+*/
+
+
+function showLogin(){
+    cleanNavDivs();
+
+    console.log("calling showLogin() ... temp with fake auth");
+
+    useremail = "bmagnett@gmail.com"
+    var email = useremail.replace(".", "!");
+    window.magnet_user = email
+    
+    // Test for the existence of users/email
+    var ref = firebase.database().ref("users/"+email);
+    ref.once("value")
+      .then(function(snapshot) {
+        if (snapshot.exists() == false){
+            // new user to create space on database
+            firebase.database().ref('users/' + email).set({
+                forms: {used_cnt:0,plan_cnt:20},
+                pforms: {used_cnt:0,plan_cnt:20}
+            });
+            // update the UI
+            document.getElementById('login').className = "w3-container w3-center w3-dark-grey w3-show";
+            document.getElementById('login-user').innerText = email;
+            window.location.hash = "login";
+        } else {
+            // existing user, pull down info from database
+        
+            // update the UI
+            getFormNames(email);
+            document.getElementById('login').className = "w3-container w3-center w3-dark-grey w3-show";
+            document.getElementById('login-user').innerText = useremail;
+            window.location.hash = "login";
+
+        }
+      });
+
+
+}
+
+
+function GetFormData(form){
+    console.log("get data for "+form);
+    //remove previous data
+    var myNode = document.getElementById("db-content");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
+    
+    var para = document.createElement("p");
+    para.setAttribute("style", "width:100%");
+    para.setAttribute("id", "form-table");
+    myNode.appendChild(para)
+
+    VisualizeFormValidate("form-table",form)
+    
+}
+
+function GetPformData(pform){
+    console.log("get data for "+pform);
+    //remove previous data
+    var myNode = document.getElementById("db-content");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
+    var img = document.createElement("IMG");
+    img.setAttribute("style", "width:100%");
+    img.setAttribute("id", "pform-img");
+    myNode.appendChild(img)
+    
+    
+    var butt = document.createElement("BUTTON");
+    butt.setAttribute("id", "pform-skip");
+    butt.setAttribute("class", "w3-button w3-green");
+    butt.setAttribute("style", "width:100%");
+    butt.innerText = "Skip";
+    myNode.appendChild(butt)
+
+    var butt = document.createElement("BUTTON");
+    butt.setAttribute("id", "pform-remove");
+    butt.setAttribute("class", "w3-button w3-green");
+    butt.setAttribute("style", "width:100%");
+    butt.innerText = "Remove";
+    myNode.appendChild(butt)
+    
+    
+    VisualizePhotoValidate("pform-img","pform-remove","pform-skip",pform)
+}
+
+function hideLogin(){
+
+    firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+        document.getElementById('login').className = "w3-container w3-center w3-dark-grey w3-hide";
+        document.getElementById('login-user').innerText = "";
+        window.location.hash = "about";
+    }).catch(function(error) {
+        // An error happened.
+    });
+
+}
+</script>
+
+
+
+
+<style>
+.vertical-menu-content {
+  overflow-y: scroll;
+  height: 450px;
+}
+.vertical-menu {
+  overflow-y: scroll;
+  height: 500px;
+}
+.vertical-menu a {
+  background-color: #eee;
+  color: black;
+  display: block;
+  padding: 12px;
+  text-decoration: none;
+}
+
+.vertical-menu a:hover {
+  background-color: #ccc;
+}
+
+.vertical-menu a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+
+
 <script>
 // Modal Image Gallery
 function onClick(element) {
@@ -349,94 +692,6 @@ function w3_open() {
 // Close the sidebar with the close button
 function w3_close() {
     mySidebar.style.display = "none";
-}
-</script>
-
-
-
-<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-storage.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase-database.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-
-
-<script src="magnet_admin.js" id="magnet-setup"></script>
-<!--
-<script src="https://bmagnetta.github.io/magnet/magnet.js"></script>
--->
-
-
-
-
-
-<script>
-function showLogin(){
-    console.log("calling showLogin()");
-
-    var provider = new firebase.auth.GoogleAuthProvider();
-    
-    firebase.auth().signInWithPopup(provider).then(function(result) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        var token = result.credential.accessToken;
-        // The signed-in user info.
-        var user = result.user;
-        console.log(user);
-        
-        var email = user.email.replace(".", "!");
-                
-        // Test for the existence of users/email
-        var ref = firebase.database().ref("users/"+email);
-        ref.once("value")
-          .then(function(snapshot) {
-            if (snapshot.exists() == false){
-                // new user to create space on database
-                firebase.database().ref('users/' + email).set({
-                    forms: {used_cnt:0,plan_cnt:0},
-                    pforms: {used_cnt:0,plan_cnt:0}
-                });
-                // update the UI
-                document.getElementById('login').className = "w3-container w3-center w3-dark-grey w3-show";
-                document.getElementById('login-user').innerText = email;
-                window.location.hash = "login";
-            } else {
-                // existing user, pull down info from database
-                
-                // update the UI
-                document.getElementById('login').className = "w3-container w3-center w3-dark-grey w3-show";
-                document.getElementById('login-user').innerText = email;
-                window.location.hash = "login";
-            
-            }
-          });
-
-
-    }).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        // ...
-        console.log(error);
-    });
-
-
-}
-function hideLogin(){
-
-    firebase.auth().signOut().then(function() {
-        // Sign-out successful.
-        document.getElementById('login').className = "w3-container w3-center w3-dark-grey w3-hide";
-        document.getElementById('login-user').innerText = "";
-        window.location.hash = "about";
-    }).catch(function(error) {
-        // An error happened.
-    });
-
 }
 </script>
 
